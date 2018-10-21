@@ -3,11 +3,17 @@ WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor' : 1};
 
 USE __KEYSPACE__;
 
+CREATE TYPE attributes (
+    amount text,
+    currency text,
+    reference text
+);
+
 CREATE TABLE IF NOT EXISTS payments (
     id UUID,
     type text,
     organisation_id UUID,
-    version text,
-    attributes text,
+    version int,
+    attributes frozen <attributes>,
     PRIMARY KEY(id)
 );

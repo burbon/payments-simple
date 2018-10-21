@@ -7,7 +7,9 @@ clean:
 run:
 	./ps
 
-test: drop-test-database test-database
+test: drop-test-database test-database run-test
+
+run-test:
 	go test payments-simple/internal/app/ps -v -count=1
 
 database:

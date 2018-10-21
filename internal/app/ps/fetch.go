@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/gocql/gocql"
+	//"github.com/gocql/gocql"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -29,18 +29,19 @@ func FetchPaymentsFromSource() (payments PaymentsSource, err error) {
 		return
 	}
 
-	CreatePayment(body)
+	CreatePayment(payments)
 
 	return
 }
 
-func CreatePayment(payment []byte) {
-	payment = []byte(`{}`)
-	//if err := session.Query(`INSERT INTO payments JSON '?'`, payment).Exec(); err != nil {
-	//	log.Fatal(err)
-	//}
-	if err := session.Query(`INSERT INTO payments (id) values (?)`,
-		gocql.TimeUUID()).Exec(); err != nil {
-		log.Fatal(err)
+func CreatePayment(payments PaymentsSource) {
+	var payment []byte
+	var err error
+	if payment, err = json.Marshal(payments.Data[0]); err != nil {
+		log.Fatalf("failed marshaling: %s", err)
+	}
+	log.Debugf("payment %s", payment)
+	if err := session.Query(`INSERT INTO payments JSON ?`, payment).Exec(); err != nil {
+		log.Fatalf("failed creating payment: %s", err)
 	}
 }
