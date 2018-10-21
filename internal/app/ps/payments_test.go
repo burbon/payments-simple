@@ -16,5 +16,5 @@ func TestFetch(t *testing.T) {
 	err := json.Unmarshal([]byte(resp.Body.String()), &body)
 	assert.Nil(t, err)
 
-	assert.Equal(t, "fetched", body["message"])
+	assert.Equal(t, "fetched 14", body["message"])
 }

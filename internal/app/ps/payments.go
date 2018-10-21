@@ -1,18 +1,19 @@
 package ps
 
 import (
-	"net/http"
-
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"net/http"
+	// log "github.com/sirupsen/logrus"
 )
 
 func FetchPayments(c *gin.Context) {
-	body, err := FetchPaymentsFromSource()
+	rawPayments, err := FetchPaymentsFromSource()
 	var message string
 	if err != nil {
 		message = "failed"
 	}
-	message = string(body)
+	message = fmt.Sprintf("fetched %d", len(rawPayments.Data))
 
 	c.JSON(http.StatusOK, gin.H{"message": message})
 }

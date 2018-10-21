@@ -8,4 +8,4 @@ run:
 	./ps
 
 test:
-	go test payments-simple/internal/app/ps -v
+	go test payments-simple/internal/app/ps -v -count=1
