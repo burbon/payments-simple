@@ -7,8 +7,17 @@ clean:
 run:
 	./ps
 
-test:
+test: drop-test-database test-database
 	go test payments-simple/internal/app/ps -v -count=1
 
 database:
-	cqlsh -f hack/database-init.cql
+	sed s/__KEYSPACE__/paymentssimple/ hack/database-init.tcql | cqlsh
+
+test-database:
+	sed s/__KEYSPACE__/test_paymentssimple/ hack/database-init.tcql | cqlsh
+
+drop-database:
+	sed s/__KEYSPACE__/paymentssimple/ hack/database-drop.tcql | cqlsh
+
+drop-test-database:
+	sed s/__KEYSPACE__/test_paymentssimple/ hack/database-drop.tcql | cqlsh

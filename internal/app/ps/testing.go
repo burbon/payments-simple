@@ -3,6 +3,7 @@ package ps
 import (
 	"net/http"
 	"net/http/httptest"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,6 +13,8 @@ var (
 )
 
 func setup() {
+	os.Setenv("PS_CASSANDRA_KEYSPACE", "test_paymentssimple")
+
 	LoadConfig()
 	CreateSession()
 	router = SetupRouter()
