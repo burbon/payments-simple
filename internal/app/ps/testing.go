@@ -12,6 +12,7 @@ var (
 )
 
 func setup() {
+	LoadConfig()
 	router = SetupRouter()
 }
 

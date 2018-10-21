@@ -7,7 +7,14 @@ import (
 )
 
 func FetchPayments(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"message": "fetched"})
+	body, err := FetchPaymentsFromSource()
+	var message string
+	if err != nil {
+		message = "failed"
+	}
+	message = string(body)
+
+	c.JSON(http.StatusOK, gin.H{"message": message})
 }
 
 func PaymentsRegister(r *gin.RouterGroup) {
