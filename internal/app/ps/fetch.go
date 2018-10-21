@@ -9,7 +9,18 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func FetchPaymentsFromSource() (payments PaymentsSource, err error) {
+func FetchPaymentsFromSource() (cnt int, err error) {
+	rawPayments, err := fetchPaymentsFromSource()
+	cnt = len(rawPayments.Data)
+
+	for _, rp := range rawPayments.Data {
+		CreatePayment(rp)
+	}
+
+	return
+}
+
+func fetchPaymentsFromSource() (payments PaymentsSource, err error) {
 	resp, err := http.Get(config.PaymentsSourceURL)
 	if err != nil {
 		log.Fatalf("failed connecting to source: %s", err)
@@ -29,15 +40,13 @@ func FetchPaymentsFromSource() (payments PaymentsSource, err error) {
 		return
 	}
 
-	CreatePayment(payments)
-
 	return
 }
 
-func CreatePayment(payments PaymentsSource) {
+func CreatePayment(rawPayment PaymentSourceResource) {
 	var payment []byte
 	var err error
-	if payment, err = json.Marshal(payments.Data[0]); err != nil {
+	if payment, err = json.Marshal(rawPayment); err != nil {
 		log.Fatalf("failed marshaling: %s", err)
 	}
 	log.Debugf("payment %s", payment)

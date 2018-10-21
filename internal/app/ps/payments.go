@@ -8,12 +8,12 @@ import (
 )
 
 func FetchPayments(c *gin.Context) {
-	rawPayments, err := FetchPaymentsFromSource()
+	pcnt, err := FetchPaymentsFromSource()
 	var message string
 	if err != nil {
 		message = "failed"
 	}
-	message = fmt.Sprintf("fetched %d", len(rawPayments.Data))
+	message = fmt.Sprintf("fetched %d", pcnt)
 
 	c.JSON(http.StatusOK, gin.H{"message": message})
 }
