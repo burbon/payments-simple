@@ -5,11 +5,14 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func CreateSession() (session *gocql.Session) {
+var session *gocql.Session
+
+func CreateSession() {
 	cluster := gocql.NewCluster(config.CassandraCluster)
 	cluster.Keyspace = config.CassandraKeyspace
 
-	session, err := cluster.CreateSession()
+	var err error
+	session, err = cluster.CreateSession()
 	if err != nil {
 		panic(err)
 	}
@@ -17,4 +20,8 @@ func CreateSession() (session *gocql.Session) {
 	log.Debug("Cassandra OK")
 
 	return
+}
+
+func CloseSession() {
+	session.Close()
 }

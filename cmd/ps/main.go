@@ -5,8 +5,8 @@ import "payments-simple/internal/app/ps"
 func main() {
 	ps.LoadConfig()
 
-	session := ps.CreateSession()
-	defer session.Close()
+	ps.CreateSession()
+	defer ps.CloseSession()
 
 	ps.RunServer()
 }

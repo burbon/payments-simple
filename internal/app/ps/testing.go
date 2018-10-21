@@ -13,7 +13,12 @@ var (
 
 func setup() {
 	LoadConfig()
+	CreateSession()
 	router = SetupRouter()
+}
+
+func shutdown() {
+	CloseSession()
 }
 
 func request(method, path string) *httptest.ResponseRecorder {
