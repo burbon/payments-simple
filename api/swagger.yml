@@ -4,7 +4,6 @@ info:
   description: Payments API
   title: PaymentsSimple application
   version: 0.0.1
-paths: {}
 produces:
 - application/json
 schemes:

@@ -1,6 +1,7 @@
 # Simple Payments API
+API is meant to be a part of bigger platform behind auth gateway
 
-## Design
+## Technical Choices
 * Web Framework
   `go-swagger` provides api validation and error handling based API swagger specification
 * Storage
