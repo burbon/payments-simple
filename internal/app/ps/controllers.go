@@ -2,22 +2,35 @@ package ps
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"net/http"
+	//	"net/http"
 	// log "github.com/sirupsen/logrus"
+	"github.com/go-openapi/runtime/middleware"
+
+	"payments-simple/internal/pkg/rest/models"
+	"payments-simple/internal/pkg/rest/restapi/operations"
 )
 
-func FetchPayments(c *gin.Context) {
-	pcnt, err := FetchPaymentsFromSource()
-	var message string
-	if err != nil {
-		message = "failed"
-	}
-	message = fmt.Sprintf("fetched %d", pcnt)
+func SetupAPIHandlers(api *operations.PaymentsSimpleApplicationAPI) {
+	api.GetPingHandler = operations.GetPingHandlerFunc(
+		func(params operations.GetPingParams) middleware.Responder {
+			message := "pong"
+			return operations.NewGetPingOK().WithPayload(&models.Message{Message: &message})
+		})
 
-	c.JSON(http.StatusOK, gin.H{"message": message})
-}
+	api.GetFetchHandler = operations.GetFetchHandlerFunc(
+		func(params operations.GetFetchParams) middleware.Responder {
+			pcnt, err := FetchPaymentsFromSource()
+			var message string
+			if err != nil {
+				message = "failed"
+			}
+			message = fmt.Sprintf("fetched %d", pcnt)
+			return operations.NewGetFetchOK().WithPayload(&models.Message{Message: &message})
+		})
 
-func PaymentsRegister(r *gin.RouterGroup) {
-	r.GET("/fetch", FetchPayments)
+	api.GetHandler = operations.GetHandlerFunc(
+		func(params operations.GetParams) middleware.Responder {
+			payments := QGetPayments()
+			return operations.NewGetOK().WithPayload(payments)
+		})
 }
