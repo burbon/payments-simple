@@ -6,7 +6,7 @@ import (
 )
 
 type Specification struct {
-	Debug             bool   `envconfig:"debug" default:"true"`
+	Debug             bool   `envconfig:"debug" default:"false"`
 	Port              int    `envconfig:"babel_service_port_http" default:"8080"`
 	PaymentsSourceURL string `default:"http://mockbin.org/bin/41ca3269-d8c4-4063-9fd5-f306814ff03f"`
 	CassandraCluster  string `envconfig:"cassandra_cluster" default:"127.0.0.1"`

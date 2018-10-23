@@ -12,7 +12,7 @@ func QCreatePaymentsFromJSON(payment []byte) {
 	log.Debugf("payment %s", payment)
 	query := `INSERT INTO payments JSON ?`
 	if err := session.Query(query, payment).Exec(); err != nil {
-		log.Fatalf("failed creating payment: %s", err)
+		log.Warnf("failed creating payment: %s", err)
 	}
 }
 
@@ -23,14 +23,15 @@ func QGetPayments() []*models.Payment {
 	query := `SELECT id, type, organisation_id, version, attributes FROM payments`
 	iterable := session.Query(query).Iter()
 	for iterable.MapScan(m) {
+		amount := m["attributes"].(map[string]interface{})["amount"].(string)
 		payments = append(payments, &models.Payment{
 			ID:             strfmt.UUID(m["id"].(gocql.UUID).String()),
 			Type:           m["type"].(string),
 			OrganisationID: strfmt.UUID(m["organisation_id"].(gocql.UUID).String()),
 			Version:        int64(m["version"].(int)),
-			//Attributes:     &models.Attributes{
-			//	Amount: m["attributes"].
-			//},
+			Attributes: &models.Attributes{
+				Amount: &amount,
+			},
 		})
 		m = map[string]interface{}{}
 	}

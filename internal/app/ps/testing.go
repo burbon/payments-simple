@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
+
+	log "github.com/sirupsen/logrus"
 )
 
 var (
@@ -27,4 +29,11 @@ func request(method, path string) *httptest.ResponseRecorder {
 	w := httptest.NewRecorder()
 	handler.ServeHTTP(w, req)
 	return w
+}
+
+func clearStorage() {
+	query := `TRUNCATE payments`
+	if err := session.Query(query).Exec(); err != nil {
+		log.Warnf("failed truncating: %s", err)
+	}
 }
