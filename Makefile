@@ -23,3 +23,13 @@ drop-database:
 
 drop-test-database:
 	sed s/__KEYSPACE__/test_paymentssimple/ hack/database-drop.tcql | cqlsh
+
+swagger-validate:
+	swagger validate ./api/swagger.yml
+
+swagger-generate:
+	mkdir -p ./internal/pkg/rest
+	swagger generate server \
+		--target=./internal/pkg/rest \
+		--spec=./api/swagger.yml \
+		--exclude-main

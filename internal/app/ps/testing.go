@@ -4,12 +4,10 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
-
-	"github.com/gin-gonic/gin"
 )
 
 var (
-	router *gin.Engine
+	handler http.Handler
 )
 
 func setup() {
@@ -17,7 +15,7 @@ func setup() {
 
 	LoadConfig()
 	CreateSession()
-	router = SetupRouter()
+	handler = SetupHandler()
 }
 
 func shutdown() {
@@ -27,6 +25,6 @@ func shutdown() {
 func request(method, path string) *httptest.ResponseRecorder {
 	req, _ := http.NewRequest(method, path, nil)
 	w := httptest.NewRecorder()
-	router.ServeHTTP(w, req)
+	handler.ServeHTTP(w, req)
 	return w
 }

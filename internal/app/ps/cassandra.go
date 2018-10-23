@@ -8,8 +8,8 @@ import (
 var session *gocql.Session
 
 func CreateSession() {
-	cluster := gocql.NewCluster(config.CassandraCluster)
-	cluster.Keyspace = config.CassandraKeyspace
+	cluster := gocql.NewCluster(Config.CassandraCluster)
+	cluster.Keyspace = Config.CassandraKeyspace
 
 	var err error
 	session, err = cluster.CreateSession()

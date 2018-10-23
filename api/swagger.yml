@@ -1,0 +1,99 @@
+consumes:
+- application/json
+info:
+  description: Payments API
+  title: PaymentsSimple application
+  version: 0.0.1
+paths: {}
+produces:
+- application/json
+schemes:
+- http
+swagger: "2.0"
+
+definitions:
+  payment:
+    type: object
+    required:
+      - attributes
+    properties:
+      id:
+        type: string
+        format: uuid
+        readOnly: true
+      type:
+        type: string
+        #minLength: 1
+      organisation_id:
+        type: string
+        format: uuid
+        readOnly: true
+      version:
+        type: integer
+      attributes:
+        $ref: "#/definitions/attributes"
+
+  attributes: 
+    type: object
+    required:
+      - amount
+      - currency
+      - reference
+    properties:
+      amount:
+        type: string
+        minLength: 1
+      currency:
+        type: string
+        minLength: 1
+      reference:
+        type: string
+        minLength: 1
+
+  message:
+    type: object
+    required:
+      - message
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+
+
+paths:
+  /ping:
+    get:
+      responses:
+        200:
+          description: ping service
+          schema:
+            $ref: "#/definitions/message"
+        default:
+          description: generic error response
+          schema:
+            $ref: "#/definitions/message"
+  /:
+    get:
+      responses:
+        200:
+          description: list payments operations
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/payment"
+        default:
+          description: generic error response
+          schema:
+            $ref: "#/definitions/message"
+  /fetch:
+    get:
+      responses:
+        200:
+          description: fetch payments from source
+          schema:
+            $ref: "#/definitions/message"
+        default:
+          description: generic error response
+          schema:
+            $ref: "#/definitions/message"

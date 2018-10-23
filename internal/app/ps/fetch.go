@@ -21,7 +21,7 @@ func FetchPaymentsFromSource() (cnt int, err error) {
 }
 
 func fetchPaymentsFromSource() (payments PaymentsSource, err error) {
-	resp, err := http.Get(config.PaymentsSourceURL)
+	resp, err := http.Get(Config.PaymentsSourceURL)
 	if err != nil {
 		log.Fatalf("failed connecting to source: %s", err)
 		return
