@@ -36,9 +36,10 @@ func init() {
   "paths": {
     "/": {
       "get": {
+        "summary": "list payments",
         "responses": {
           "200": {
-            "description": "list payments operations",
+            "description": "success",
             "schema": {
               "type": "array",
               "items": {
@@ -47,46 +48,136 @@ func init() {
             }
           },
           "default": {
-            "description": "generic error response",
+            "$ref": "#/responses/Error"
+          }
+        }
+      },
+      "post": {
+        "summary": "create payment",
+        "parameters": [
+          {
+            "description": "The payment to create",
+            "name": "payment",
+            "in": "body",
             "schema": {
-              "$ref": "#/definitions/message"
+              "$ref": "#/definitions/payment"
             }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "created"
+          },
+          "default": {
+            "$ref": "#/responses/Error"
           }
         }
       }
     },
     "/fetch": {
       "get": {
+        "summary": "fetch/import payments from source",
         "responses": {
           "200": {
-            "description": "fetch payments from source",
+            "description": "success",
             "schema": {
               "$ref": "#/definitions/message"
             }
           },
           "default": {
-            "description": "generic error response",
-            "schema": {
-              "$ref": "#/definitions/message"
-            }
+            "$ref": "#/responses/Error"
           }
         }
       }
     },
     "/ping": {
       "get": {
+        "summary": "ping service",
         "responses": {
           "200": {
-            "description": "ping service",
+            "description": "success",
             "schema": {
               "$ref": "#/definitions/message"
             }
           },
           "default": {
-            "description": "generic error response",
+            "$ref": "#/responses/Error"
+          }
+        }
+      }
+    },
+    "/{id}": {
+      "get": {
+        "summary": "get payment",
+        "parameters": [
+          {
+            "$ref": "#/parameters/payment_id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
             "schema": {
-              "$ref": "#/definitions/message"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/payment"
+              }
             }
+          },
+          "default": {
+            "$ref": "#/responses/Error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "delete payment",
+        "parameters": [
+          {
+            "$ref": "#/parameters/payment_id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/payment"
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/responses/Error"
+          }
+        }
+      },
+      "patch": {
+        "summary": "patch payment",
+        "parameters": [
+          {
+            "$ref": "#/parameters/payment_id"
+          },
+          {
+            "description": "payment patch body",
+            "name": "payment",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/payment"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/payment"
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/responses/Error"
           }
         }
       }
@@ -121,9 +212,6 @@ func init() {
         "message"
       ],
       "properties": {
-        "code": {
-          "type": "integer"
-        },
         "message": {
           "type": "string"
         }
@@ -154,6 +242,24 @@ func init() {
         "version": {
           "type": "integer"
         }
+      }
+    }
+  },
+  "parameters": {
+    "payment_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Payment ID",
+      "name": "id",
+      "in": "path",
+      "required": true
+    }
+  },
+  "responses": {
+    "Error": {
+      "description": "generic error",
+      "schema": {
+        "$ref": "#/definitions/message"
       }
     }
   }
@@ -177,9 +283,10 @@ func init() {
   "paths": {
     "/": {
       "get": {
+        "summary": "list payments",
         "responses": {
           "200": {
-            "description": "list payments operations",
+            "description": "success",
             "schema": {
               "type": "array",
               "items": {
@@ -188,7 +295,31 @@ func init() {
             }
           },
           "default": {
-            "description": "generic error response",
+            "description": "generic error",
+            "schema": {
+              "$ref": "#/definitions/message"
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "create payment",
+        "parameters": [
+          {
+            "description": "The payment to create",
+            "name": "payment",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/payment"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "created"
+          },
+          "default": {
+            "description": "generic error",
             "schema": {
               "$ref": "#/definitions/message"
             }
@@ -198,15 +329,16 @@ func init() {
     },
     "/fetch": {
       "get": {
+        "summary": "fetch/import payments from source",
         "responses": {
           "200": {
-            "description": "fetch payments from source",
+            "description": "success",
             "schema": {
               "$ref": "#/definitions/message"
             }
           },
           "default": {
-            "description": "generic error response",
+            "description": "generic error",
             "schema": {
               "$ref": "#/definitions/message"
             }
@@ -216,15 +348,116 @@ func init() {
     },
     "/ping": {
       "get": {
+        "summary": "ping service",
         "responses": {
           "200": {
-            "description": "ping service",
+            "description": "success",
             "schema": {
               "$ref": "#/definitions/message"
             }
           },
           "default": {
-            "description": "generic error response",
+            "description": "generic error",
+            "schema": {
+              "$ref": "#/definitions/message"
+            }
+          }
+        }
+      }
+    },
+    "/{id}": {
+      "get": {
+        "summary": "get payment",
+        "parameters": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "description": "Payment ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/payment"
+              }
+            }
+          },
+          "default": {
+            "description": "generic error",
+            "schema": {
+              "$ref": "#/definitions/message"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "delete payment",
+        "parameters": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "description": "Payment ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/payment"
+              }
+            }
+          },
+          "default": {
+            "description": "generic error",
+            "schema": {
+              "$ref": "#/definitions/message"
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "patch payment",
+        "parameters": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "description": "Payment ID",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "payment patch body",
+            "name": "payment",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/payment"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/payment"
+              }
+            }
+          },
+          "default": {
+            "description": "generic error",
             "schema": {
               "$ref": "#/definitions/message"
             }
@@ -262,9 +495,6 @@ func init() {
         "message"
       ],
       "properties": {
-        "code": {
-          "type": "integer"
-        },
         "message": {
           "type": "string"
         }
@@ -295,6 +525,24 @@ func init() {
         "version": {
           "type": "integer"
         }
+      }
+    }
+  },
+  "parameters": {
+    "payment_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Payment ID",
+      "name": "id",
+      "in": "path",
+      "required": true
+    }
+  },
+  "responses": {
+    "Error": {
+      "description": "generic error",
+      "schema": {
+        "$ref": "#/definitions/message"
       }
     }
   }

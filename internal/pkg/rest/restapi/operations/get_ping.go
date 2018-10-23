@@ -31,7 +31,7 @@ func NewGetPing(ctx *middleware.Context, handler GetPingHandler) *GetPing {
 
 /*GetPing swagger:route GET /ping getPing
 
-GetPing get ping API
+ping service
 
 */
 type GetPing struct {

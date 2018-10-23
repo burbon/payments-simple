@@ -15,7 +15,7 @@ import (
 // GetOKCode is the HTTP code returned for type GetOK
 const GetOKCode int = 200
 
-/*GetOK list payments operations
+/*GetOK success
 
 swagger:response getOK
 */
@@ -59,7 +59,7 @@ func (o *GetOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer)
 
 }
 
-/*GetDefault generic error response
+/*GetDefault generic error
 
 swagger:response getDefault
 */

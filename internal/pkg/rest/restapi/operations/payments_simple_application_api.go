@@ -37,14 +37,26 @@ func NewPaymentsSimpleApplicationAPI(spec *loads.Document) *PaymentsSimpleApplic
 		BearerAuthenticator: security.BearerAuth,
 		JSONConsumer:        runtime.JSONConsumer(),
 		JSONProducer:        runtime.JSONProducer(),
+		DeleteIDHandler: DeleteIDHandlerFunc(func(params DeleteIDParams) middleware.Responder {
+			return middleware.NotImplemented("operation DeleteID has not yet been implemented")
+		}),
 		GetHandler: GetHandlerFunc(func(params GetParams) middleware.Responder {
 			return middleware.NotImplemented("operation Get has not yet been implemented")
 		}),
 		GetFetchHandler: GetFetchHandlerFunc(func(params GetFetchParams) middleware.Responder {
 			return middleware.NotImplemented("operation GetFetch has not yet been implemented")
 		}),
+		GetIDHandler: GetIDHandlerFunc(func(params GetIDParams) middleware.Responder {
+			return middleware.NotImplemented("operation GetID has not yet been implemented")
+		}),
 		GetPingHandler: GetPingHandlerFunc(func(params GetPingParams) middleware.Responder {
 			return middleware.NotImplemented("operation GetPing has not yet been implemented")
+		}),
+		PatchIDHandler: PatchIDHandlerFunc(func(params PatchIDParams) middleware.Responder {
+			return middleware.NotImplemented("operation PatchID has not yet been implemented")
+		}),
+		PostHandler: PostHandlerFunc(func(params PostParams) middleware.Responder {
+			return middleware.NotImplemented("operation Post has not yet been implemented")
 		}),
 	}
 }
@@ -77,12 +89,20 @@ type PaymentsSimpleApplicationAPI struct {
 	// JSONProducer registers a producer for a "application/json" mime type
 	JSONProducer runtime.Producer
 
+	// DeleteIDHandler sets the operation handler for the delete ID operation
+	DeleteIDHandler DeleteIDHandler
 	// GetHandler sets the operation handler for the get operation
 	GetHandler GetHandler
 	// GetFetchHandler sets the operation handler for the get fetch operation
 	GetFetchHandler GetFetchHandler
+	// GetIDHandler sets the operation handler for the get ID operation
+	GetIDHandler GetIDHandler
 	// GetPingHandler sets the operation handler for the get ping operation
 	GetPingHandler GetPingHandler
+	// PatchIDHandler sets the operation handler for the patch ID operation
+	PatchIDHandler PatchIDHandler
+	// PostHandler sets the operation handler for the post operation
+	PostHandler PostHandler
 
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
@@ -146,6 +166,10 @@ func (o *PaymentsSimpleApplicationAPI) Validate() error {
 		unregistered = append(unregistered, "JSONProducer")
 	}
 
+	if o.DeleteIDHandler == nil {
+		unregistered = append(unregistered, "DeleteIDHandler")
+	}
+
 	if o.GetHandler == nil {
 		unregistered = append(unregistered, "GetHandler")
 	}
@@ -154,8 +178,20 @@ func (o *PaymentsSimpleApplicationAPI) Validate() error {
 		unregistered = append(unregistered, "GetFetchHandler")
 	}
 
+	if o.GetIDHandler == nil {
+		unregistered = append(unregistered, "GetIDHandler")
+	}
+
 	if o.GetPingHandler == nil {
 		unregistered = append(unregistered, "GetPingHandler")
+	}
+
+	if o.PatchIDHandler == nil {
+		unregistered = append(unregistered, "PatchIDHandler")
+	}
+
+	if o.PostHandler == nil {
+		unregistered = append(unregistered, "PostHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -256,6 +292,11 @@ func (o *PaymentsSimpleApplicationAPI) initHandlerCache() {
 		o.handlers = make(map[string]map[string]http.Handler)
 	}
 
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
+	o.handlers["DELETE"]["/{id}"] = NewDeleteID(o.context, o.DeleteIDHandler)
+
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
@@ -269,7 +310,22 @@ func (o *PaymentsSimpleApplicationAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
+	o.handlers["GET"]["/{id}"] = NewGetID(o.context, o.GetIDHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
 	o.handlers["GET"]["/ping"] = NewGetPing(o.context, o.GetPingHandler)
+
+	if o.handlers["PATCH"] == nil {
+		o.handlers["PATCH"] = make(map[string]http.Handler)
+	}
+	o.handlers["PATCH"]["/{id}"] = NewPatchID(o.context, o.PatchIDHandler)
+
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"][""] = NewPost(o.context, o.PostHandler)
 
 }
 

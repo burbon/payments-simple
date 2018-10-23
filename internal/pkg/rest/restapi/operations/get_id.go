@@ -11,40 +11,40 @@ import (
 	middleware "github.com/go-openapi/runtime/middleware"
 )
 
-// GetHandlerFunc turns a function with the right signature into a get handler
-type GetHandlerFunc func(GetParams) middleware.Responder
+// GetIDHandlerFunc turns a function with the right signature into a get ID handler
+type GetIDHandlerFunc func(GetIDParams) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn GetHandlerFunc) Handle(params GetParams) middleware.Responder {
+func (fn GetIDHandlerFunc) Handle(params GetIDParams) middleware.Responder {
 	return fn(params)
 }
 
-// GetHandler interface for that can handle valid get params
-type GetHandler interface {
-	Handle(GetParams) middleware.Responder
+// GetIDHandler interface for that can handle valid get ID params
+type GetIDHandler interface {
+	Handle(GetIDParams) middleware.Responder
 }
 
-// NewGet creates a new http.Handler for the get operation
-func NewGet(ctx *middleware.Context, handler GetHandler) *Get {
-	return &Get{Context: ctx, Handler: handler}
+// NewGetID creates a new http.Handler for the get ID operation
+func NewGetID(ctx *middleware.Context, handler GetIDHandler) *GetID {
+	return &GetID{Context: ctx, Handler: handler}
 }
 
-/*Get swagger:route GET / get
+/*GetID swagger:route GET /{id} getId
 
-list payments
+get payment
 
 */
-type Get struct {
+type GetID struct {
 	Context *middleware.Context
-	Handler GetHandler
+	Handler GetIDHandler
 }
 
-func (o *Get) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+func (o *GetID) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	route, rCtx, _ := o.Context.RouteInfo(r)
 	if rCtx != nil {
 		r = rCtx
 	}
-	var Params = NewGetParams()
+	var Params = NewGetIDParams()
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params
 		o.Context.Respond(rw, r, route.Produces, route, err)

@@ -16,9 +16,6 @@ import (
 // swagger:model message
 type Message struct {
 
-	// code
-	Code int64 `json:"code,omitempty"`
-
 	// message
 	// Required: true
 	Message *string `json:"message"`

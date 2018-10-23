@@ -31,7 +31,7 @@ func NewGetFetch(ctx *middleware.Context, handler GetFetchHandler) *GetFetch {
 
 /*GetFetch swagger:route GET /fetch getFetch
 
-GetFetch get fetch API
+fetch/import payments from source
 
 */
 type GetFetch struct {

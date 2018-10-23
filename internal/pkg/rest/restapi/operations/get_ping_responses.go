@@ -15,7 +15,7 @@ import (
 // GetPingOKCode is the HTTP code returned for type GetPingOK
 const GetPingOKCode int = 200
 
-/*GetPingOK ping service
+/*GetPingOK success
 
 swagger:response getPingOK
 */
@@ -56,7 +56,7 @@ func (o *GetPingOK) WriteResponse(rw http.ResponseWriter, producer runtime.Produ
 	}
 }
 
-/*GetPingDefault generic error response
+/*GetPingDefault generic error
 
 swagger:response getPingDefault
 */

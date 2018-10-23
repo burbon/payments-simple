@@ -11,40 +11,40 @@ import (
 	middleware "github.com/go-openapi/runtime/middleware"
 )
 
-// GetHandlerFunc turns a function with the right signature into a get handler
-type GetHandlerFunc func(GetParams) middleware.Responder
+// PostHandlerFunc turns a function with the right signature into a post handler
+type PostHandlerFunc func(PostParams) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn GetHandlerFunc) Handle(params GetParams) middleware.Responder {
+func (fn PostHandlerFunc) Handle(params PostParams) middleware.Responder {
 	return fn(params)
 }
 
-// GetHandler interface for that can handle valid get params
-type GetHandler interface {
-	Handle(GetParams) middleware.Responder
+// PostHandler interface for that can handle valid post params
+type PostHandler interface {
+	Handle(PostParams) middleware.Responder
 }
 
-// NewGet creates a new http.Handler for the get operation
-func NewGet(ctx *middleware.Context, handler GetHandler) *Get {
-	return &Get{Context: ctx, Handler: handler}
+// NewPost creates a new http.Handler for the post operation
+func NewPost(ctx *middleware.Context, handler PostHandler) *Post {
+	return &Post{Context: ctx, Handler: handler}
 }
 
-/*Get swagger:route GET / get
+/*Post swagger:route POST / post
 
-list payments
+create payment
 
 */
-type Get struct {
+type Post struct {
 	Context *middleware.Context
-	Handler GetHandler
+	Handler PostHandler
 }
 
-func (o *Get) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+func (o *Post) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	route, rCtx, _ := o.Context.RouteInfo(r)
 	if rCtx != nil {
 		r = rCtx
 	}
-	var Params = NewGetParams()
+	var Params = NewPostParams()
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params
 		o.Context.Respond(rw, r, route.Produces, route, err)

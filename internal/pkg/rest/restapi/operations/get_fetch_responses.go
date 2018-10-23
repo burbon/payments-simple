@@ -15,7 +15,7 @@ import (
 // GetFetchOKCode is the HTTP code returned for type GetFetchOK
 const GetFetchOKCode int = 200
 
-/*GetFetchOK fetch payments from source
+/*GetFetchOK success
 
 swagger:response getFetchOK
 */
@@ -56,7 +56,7 @@ func (o *GetFetchOK) WriteResponse(rw http.ResponseWriter, producer runtime.Prod
 	}
 }
 
-/*GetFetchDefault generic error response
+/*GetFetchDefault generic error
 
 swagger:response getFetchDefault
 */
