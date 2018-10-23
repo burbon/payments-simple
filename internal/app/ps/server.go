@@ -66,7 +66,7 @@ func SetupHandlers(api *operations.PaymentsSimpleApplicationAPI) {
 	api.GetPingHandler = operations.GetPingHandlerFunc(
 		func(params operations.GetPingParams) middleware.Responder {
 			message := "pong"
-			return operations.NewGetFetchOK().WithPayload(&models.Message{Message: &message})
+			return operations.NewGetPingOK().WithPayload(&models.Message{Message: &message})
 		})
 
 	api.GetFetchHandler = operations.GetFetchHandlerFunc(
@@ -78,6 +78,12 @@ func SetupHandlers(api *operations.PaymentsSimpleApplicationAPI) {
 			}
 			message = fmt.Sprintf("fetched %d", pcnt)
 			return operations.NewGetFetchOK().WithPayload(&models.Message{Message: &message})
+		})
+
+	api.GetHandler = operations.GetHandlerFunc(
+		func(params operations.GetParams) middleware.Responder {
+			payments := QGetPayments()
+			return operations.NewGetOK().WithPayload(payments)
 		})
 }
 

@@ -5,16 +5,17 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	//"github.com/gocql/gocql"
 	log "github.com/sirupsen/logrus"
+
+	"payments-simple/internal/pkg/rest/models"
 )
 
 func FetchPaymentsFromSource() (cnt int, err error) {
-	rawPayments, err := fetchPaymentsFromSource()
-	cnt = len(rawPayments.Data)
+	payments, err := fetchPaymentsFromSource()
+	cnt = len(payments.Data)
 
-	for _, rp := range rawPayments.Data {
-		CreatePayment(rp)
+	for _, p := range payments.Data {
+		CreatePayment(p)
 	}
 
 	return
@@ -43,14 +44,11 @@ func fetchPaymentsFromSource() (payments PaymentsSource, err error) {
 	return
 }
 
-func CreatePayment(rawPayment PaymentSourceResource) {
-	var payment []byte
+func CreatePayment(payment models.Payment) {
+	var rawPayment []byte
 	var err error
-	if payment, err = json.Marshal(rawPayment); err != nil {
+	if rawPayment, err = json.Marshal(payment); err != nil {
 		log.Fatalf("failed marshaling: %s", err)
 	}
-	log.Debugf("payment %s", payment)
-	if err := session.Query(`INSERT INTO payments JSON ?`, payment).Exec(); err != nil {
-		log.Fatalf("failed creating payment: %s", err)
-	}
+	QCreatePaymentsFromJSON(rawPayment)
 }
