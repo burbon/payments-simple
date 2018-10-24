@@ -38,3 +38,24 @@ func QGetPayments() []*models.Payment {
 
 	return payments
 }
+
+func QGetPayment(payment_id strfmt.UUID) *models.Payment {
+	m := map[string]interface{}{}
+	query := `SELECT id, type, organisation_id, version, attributes FROM payments WHERE id = ?`
+	id, _ := gocql.ParseUUID(payment_id.String())
+	if err := session.Query(query, id).Consistency(gocql.One).MapScan(m); err != nil {
+		log.Warnf("failed selecting payment: %s", err)
+	}
+
+	amount := m["attributes"].(map[string]interface{})["amount"].(string)
+	payment := models.Payment{
+		ID:             strfmt.UUID(m["id"].(gocql.UUID).String()),
+		Type:           m["type"].(string),
+		OrganisationID: strfmt.UUID(m["organisation_id"].(gocql.UUID).String()),
+		Version:        int64(m["version"].(int)),
+		Attributes: &models.Attributes{
+			Amount: &amount,
+		}}
+
+	return &payment
+}

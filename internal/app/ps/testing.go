@@ -37,3 +37,7 @@ func clearStorage() {
 		log.Warnf("failed truncating: %s", err)
 	}
 }
+
+func loadFixtures() {
+	_, _ = FetchPaymentsFromSource()
+}

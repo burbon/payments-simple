@@ -24,7 +24,7 @@ type GetIDOK struct {
 	/*
 	  In: Body
 	*/
-	Payload []*models.Payment `json:"body,omitempty"`
+	Payload *models.Payment `json:"body,omitempty"`
 }
 
 // NewGetIDOK creates GetIDOK with default headers values
@@ -34,13 +34,13 @@ func NewGetIDOK() *GetIDOK {
 }
 
 // WithPayload adds the payload to the get Id o k response
-func (o *GetIDOK) WithPayload(payload []*models.Payment) *GetIDOK {
+func (o *GetIDOK) WithPayload(payload *models.Payment) *GetIDOK {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the get Id o k response
-func (o *GetIDOK) SetPayload(payload []*models.Payment) {
+func (o *GetIDOK) SetPayload(payload *models.Payment) {
 	o.Payload = payload
 }
 
@@ -48,15 +48,12 @@ func (o *GetIDOK) SetPayload(payload []*models.Payment) {
 func (o *GetIDOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
 
 	rw.WriteHeader(200)
-	payload := o.Payload
-	if payload == nil {
-		payload = make([]*models.Payment, 0, 50)
+	if o.Payload != nil {
+		payload := o.Payload
+		if err := producer.Produce(rw, payload); err != nil {
+			panic(err) // let the recovery middleware deal with this
+		}
 	}
-
-	if err := producer.Produce(rw, payload); err != nil {
-		panic(err) // let the recovery middleware deal with this
-	}
-
 }
 
 /*GetIDDefault generic error

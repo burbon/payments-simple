@@ -118,10 +118,7 @@ func init() {
           "200": {
             "description": "success",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/payment"
-              }
+              "$ref": "#/definitions/payment"
             }
           },
           "default": {
@@ -382,10 +379,7 @@ func init() {
           "200": {
             "description": "success",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/payment"
-              }
+              "$ref": "#/definitions/payment"
             }
           },
           "default": {

@@ -17,3 +17,6 @@ Not all build requirements are coverd in `Makefile` rules
 ### Test
 * Unit tests are not forced to be atomic. One has to take care of it on its own running `clearStorage()`
 * Request to PaymentsSource is not mocked.
+
+### Issues
+No support for storage schema migration

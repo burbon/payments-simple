@@ -33,4 +33,10 @@ func SetupAPIHandlers(api *operations.PaymentsSimpleApplicationAPI) {
 			payments := QGetPayments()
 			return operations.NewGetOK().WithPayload(payments)
 		})
+
+	api.GetIDHandler = operations.GetIDHandlerFunc(
+		func(params operations.GetIDParams) middleware.Responder {
+			payment := QGetPayment(params.ID)
+			return operations.NewGetIDOK().WithPayload(payment)
+		})
 }

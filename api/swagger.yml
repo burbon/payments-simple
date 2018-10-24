@@ -117,9 +117,7 @@ paths:
         200:
           description: success
           schema:
-            type: array
-            items:
-              $ref: "#/definitions/payment"
+            $ref: "#/definitions/payment"
         default:
           $ref: "#/responses/Error"
     patch:
