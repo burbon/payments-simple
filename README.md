@@ -20,3 +20,7 @@ Not all build requirements are coverd in `Makefile` rules
 
 ### Issues
 No support for storage schema migration
+
+### TODO
+* implement all handlers
+* storage error handling (e.g. 404 NotFound)

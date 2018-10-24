@@ -61,9 +61,21 @@ func TestGet(t *testing.T) {
 	assertPayment(t, body[0])
 }
 
-func TestGetSingle(t *testing.T) {
+func TestGetSingleOK(t *testing.T) {
 	clearStorage()
 	loadFixtures()
+
+	resp := request("GET", fmt.Sprintf("/%s", payment_id))
+	assert.Equal(t, http.StatusOK, resp.Code)
+
+	var body map[string]interface{}
+	err := json.Unmarshal([]byte(resp.Body.String()), &body)
+	assert.Nil(t, err)
+	assertPayment(t, body)
+}
+
+func TestGetSingleNotFound(t *testing.T) {
+	clearStorage()
 
 	resp := request("GET", fmt.Sprintf("/%s", payment_id))
 	assert.Equal(t, http.StatusOK, resp.Code)
