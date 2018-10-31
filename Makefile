@@ -1,3 +1,5 @@
+setup:
+	glide install
 build:
 	go build payments-simple/cmd/ps
 
